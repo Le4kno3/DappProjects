@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+    # "app" is the container name.
+    app:
+        container_name: backend-container
+        # restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.server
+        expose:
+            - '3000'
+        ports:
+            - '3000:3000'
+        depends_on:
+            - mongo
+
+    # "mongo" is the container name, this hostname is used in backend app.js to connect to database
+    mongo:
+        # here we dont want to "restart" database automatically, it could lead to data loss.
+        container_name: database-container
+        image: mongo
+        expose:
+            - '27017'
+        ports:
+            - '27017:27017'
+        volumes:
+            - backendDB:/data/db
+
+volumes:
+    backendDB:
